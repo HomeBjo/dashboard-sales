@@ -1,0 +1,14 @@
+[
+    {
+      "month": "Januar",
+      "plan": 100,
+      "actual": 90,
+      "days": 22
+    },
+    {
+      "month": "Februar",
+      "plan": 120,
+      "actual": 110,
+      "days": 20
+    }
+  ]
