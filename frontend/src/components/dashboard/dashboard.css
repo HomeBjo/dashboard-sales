@@ -19,8 +19,29 @@ table {
   tr:nth-child(even) {
     background-color: #f2f2f2;
   }
-  sssss
- 
+
+  .dashboard-container {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+
+  .dashboard-title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .button-spacing{
+    margin-top: 20px;
+    cursor: pointer;
+  }
+
+  .button-spacing-l{
+    margin-left: 10px;
+    cursor: pointer;
+  }
+
   .goal-achieved {
     background-color: #d4edda; 
     color: #155724;

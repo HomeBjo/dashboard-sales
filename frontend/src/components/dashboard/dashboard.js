@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import salesData from "../data/salesData.json";
+import salesData from "../../data/salesData.json";
 import "./dashboard.css";
 import Chart from "./chart";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
-
+  const [showChart, setShowChart] = useState(false); // ⬅ Zustand für Chart-Steuerung
   const [filteredData, setFilteredData] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState("Alle");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -52,15 +52,15 @@ const Dashboard = () => {
    * @returns {Object} - Berechnete Werte für die täglichen Verkaufsziele und den Fortschritt.
    */
 
-  // // Funktion zur Berechnung der Werte
-  // const calculateMetrics = (item) => {
-  //   const tagesSoll = item.plan / item.days; // Wie viele Autos pro Tag verkauft werden müssen
-  //   const tagesIst = item.actual / item.days; // Wie viele tatsächlich verkauft wurden
-  //   const zielErreichungHeute = (tagesIst / tagesSoll) * 100; // Fortschritt bis heute
-  //   const zielErreichungMonat = (item.actual / item.plan) * 100; // Monatsfortschritt
+  // Funktion zur Berechnung der Werte
+  const calculateMetrics = (item) => {
+    const tagesSoll = item.plan / item.days; // Wie viele Autos pro Tag verkauft werden müssen
+    const tagesIst = item.actual / item.days; // Wie viele tatsächlich verkauft wurden
+    const zielErreichungHeute = (tagesIst / tagesSoll) * 100; // Fortschritt bis heute
+    const zielErreichungMonat = (item.actual / item.plan) * 100; // Monatsfortschritt
 
-  //   return { tagesSoll, tagesIst, zielErreichungHeute, zielErreichungMonat };
-  // };
+    return { tagesSoll, tagesIst, zielErreichungHeute, zielErreichungMonat };
+  };
 
   return (
     <div>
@@ -76,12 +76,12 @@ const Dashboard = () => {
       </select>
 
       {/* Sortierbutton */}
-      <button onClick={handleSort} style={{ marginLeft: "10px" }}>
+      <button className="button-spacing-l" onClick={handleSort}>
         Sortieren nach Plan-Zahl ({sortOrder === "asc" ? "⬆️" : "⬇️"})
       </button>
 
       {/* Tabelle */}
-      <table border="1" style={{ width: "100%", textAlign: "center", marginTop: "20px" }}>
+      <table>
         <thead>
           <tr>
             <th>Monat</th>
@@ -95,11 +95,9 @@ const Dashboard = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredData.map((item, index) => {
-            const tagesSoll = item.plan / item.days;
-            const tagesIst = item.actual / item.days;
-            const zielErreichungHeute = (tagesIst / tagesSoll) * 100;
-            const zielErreichungMonat = (item.actual / item.plan) * 100;
+        {filteredData.map((item, index) => {
+        const { tagesSoll, tagesIst, zielErreichungHeute, zielErreichungMonat } = calculateMetrics(item);
+
 
             return (
               <tr key={index}>
@@ -121,9 +119,18 @@ const Dashboard = () => {
         </tbody>
       </table>
 
-      {/* Diagramm */}
-      <h2>📊 Vergleich Plan vs. Ist</h2>
-      <Chart data={filteredData} />
+      {/* Toggle-Button für Diagramm */}
+      <button className="button-spacing" onClick={() => setShowChart(!showChart)}>
+        {showChart ? "Diagramm ausblenden ⬆" : "Diagramm anzeigen ⬇"}
+      </button>
+
+      {/* Diagramm wird nur angezeigt, wenn `showChart` true ist */}
+      {showChart && (
+        <div className="dashboard-container">
+          <h2 className="dashboard-title">📊 Vergleich Plan vs. Ist</h2>
+          <Chart data={filteredData} />
+        </div>
+      )}
     </div>
   );
 };

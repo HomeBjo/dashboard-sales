@@ -25,9 +25,9 @@
 // export default App;
 
 import React from "react";
-import Dashboard from "./components/dashboard";
-import Header from "./components/header";
-import Footer from "./components/footer";
+import Dashboard from "./components/dashboard/dashboard";
+import Header from "./components/layout/header";
+import Footer from "./components/layout/footer";
 
 function App() {
   return (

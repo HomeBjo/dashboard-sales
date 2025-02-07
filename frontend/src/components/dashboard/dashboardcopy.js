@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import salesData from "../data/salesData.json";
+import salesData from "../../data/salesData.json";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
