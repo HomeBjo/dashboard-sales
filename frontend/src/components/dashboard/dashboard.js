@@ -78,7 +78,11 @@ const Dashboard = () => {
   const calculateMetrics = (item) => {
     const tagesSoll = item.plan / item.days; // Wie viele Autos pro Tag verkauft werden müssen
     const tagesIst = item.actual / item.days; // Wie viele tatsächlich verkauft wurden
-    const zielErreichungHeute = (tagesIst / tagesSoll) * 100; // Fortschritt bis heute
+
+    // const pastdays = 15;
+    let zielErreichungHeute = (tagesIst / tagesSoll) * 100;
+    zielErreichungHeute = Math.floor(zielErreichungHeute * 100) / 100; 
+
     const zielErreichungMonat = (item.actual / item.plan) * 100; // Monatsfortschritt
 
     return { tagesSoll, tagesIst, zielErreichungHeute, zielErreichungMonat };
