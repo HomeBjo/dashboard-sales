@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import salesData from "../../data/salesData.json";
+// import salesData from "../../data/salesData.json";
 import "./dashboard.css";
 import Chart from "./chart";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
+  console.log("State von data:", data);
   const [showChart, setShowChart] = useState(false); // ⬅ Zustand für Chart-Steuerung
   const [filteredData, setFilteredData] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState("Alle");
@@ -15,10 +16,31 @@ const Dashboard = () => {
    * Wird einmal beim Laden der Komponente ausgeführt.
    */
 
+  // useEffect(() => {
+  //   setData(salesData);
+  //   setFilteredData(salesData);
+  // }, []);
+
+  /**
+   * Lädt die Verkaufsdaten aus einer API und setzt den Zustand.
+   * Wird einmal beim Laden der Komponente ausgeführt.
+   */
   useEffect(() => {
-    setData(salesData);
-    setFilteredData(salesData);
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/sales");
+        const data = await response.json();
+        console.log('hier drin ist', data);
+        setData(data);
+        setFilteredData(data);
+      } catch (error) {
+        console.error("Fehler beim Laden der Daten:", error);
+      }
+    };
+
+    fetchData(); // Aufruf der async Funktion
   }, []);
+
 
    // Funktion für das Filtern nach Monat
    const handleMonthChange = (event) => {
@@ -95,27 +117,30 @@ const Dashboard = () => {
           </tr>
         </thead>
         <tbody>
-        {filteredData.map((item, index) => {
-        const { tagesSoll, tagesIst, zielErreichungHeute, zielErreichungMonat } = calculateMetrics(item);
+        {filteredData.length > 0 ? (
+  filteredData.map((item, index) => {
+    const { tagesSoll, tagesIst, zielErreichungHeute, zielErreichungMonat } = calculateMetrics(item);
 
-
-            return (
-              <tr key={index}>
-                <td>{item.month}</td>
-                <td>{item.plan}</td>
-                <td>{item.actual}</td>
-                <td>{item.days}</td>
-                <td>{tagesSoll.toFixed(2)}</td>
-                <td>{tagesIst.toFixed(2)}</td>
-                <td className={zielErreichungHeute >= 100 ? "goal-achieved" : "goal-missed"}>
-                  {zielErreichungHeute.toFixed(2)}%
-                </td>
-                <td className={zielErreichungMonat >= 100 ? "goal-achieved" : "goal-missed"}>
-                  {zielErreichungMonat.toFixed(2)}%
-                </td>
-              </tr>
-            );
-          })}
+    return (
+      <tr key={index}>
+        <td>{item.month}</td>
+        <td>{item.plan}</td>
+        <td>{item.actual}</td>
+        <td>{item.days}</td>
+        <td>{tagesSoll.toFixed(2)}</td>
+        <td>{tagesIst.toFixed(2)}</td>
+        <td className={zielErreichungHeute >= 100 ? "goal-achieved" : "goal-missed"}>
+          {zielErreichungHeute.toFixed(2)}%
+        </td>
+        <td className={zielErreichungMonat >= 100 ? "goal-achieved" : "goal-missed"}>
+          {zielErreichungMonat.toFixed(2)}%
+        </td>
+      </tr>
+    );
+  })
+) : (
+  <tr><td colSpan="8">Keine Daten verfügbar</td></tr> // Optional: Anzeige, wenn keine Daten vorliegen
+)}
         </tbody>
       </table>
 
