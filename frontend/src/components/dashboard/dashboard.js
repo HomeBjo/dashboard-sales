@@ -11,20 +11,7 @@ const Dashboard = () => {
   const [selectedMonth, setSelectedMonth] = useState("Alle");
   const [sortOrder, setSortOrder] = useState("asc");
 
-  /**
-   * Lädt die Verkaufsdaten aus einer JSON-Datei und setzt den Zustand.
-   * Wird einmal beim Laden der Komponente ausgeführt.
-   */
 
-  // useEffect(() => {
-  //   setData(salesData);
-  //   setFilteredData(salesData);
-  // }, []);
-
-  /**
-   * Lädt die Verkaufsdaten aus einer API und setzt den Zustand.
-   * Wird einmal beim Laden der Komponente ausgeführt.
-   */
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,6 +41,7 @@ const Dashboard = () => {
     }
   };
 
+
     // Funktion für das Sortieren nach Plan-Zahl
     const handleSort = () => {
       const sortedData = [...filteredData].sort((a, b) => {
@@ -63,6 +51,22 @@ const Dashboard = () => {
       setFilteredData(sortedData);
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     };
+
+
+    // Funktion für Delete
+    const deleteSale = async (id) => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/sales/${id}`, { method: "DELETE" });
+        const result = await response.json();
+        console.log(result.message);
+    
+        setFilteredData(filteredData.filter((sale) => sale._id !== id));
+        setData(data.filter((sale) => sale._id !== id));
+      } catch (error) {
+        console.error("Fehler beim Löschen:", error);
+      }
+    };
+
 
   /**
    * Berechnet verschiedene Verkaufskennzahlen basierend auf den gegebenen Daten.
@@ -139,7 +143,12 @@ const Dashboard = () => {
         <td className={zielErreichungMonat >= 100 ? "goal-achieved" : "goal-missed"}>
           {zielErreichungMonat.toFixed(2)}%
         </td>
+        <td>
+        <button onClick={() => deleteSale(item._id)}>🗑️ Löschen</button>
+        </td>
+        
       </tr>
+      
     );
   })
 ) : (
