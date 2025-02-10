@@ -6,7 +6,6 @@ import Chart from "./chart";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
-  console.log("State von data:", data);
   const [showChart, setShowChart] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState("Alle");
@@ -25,7 +24,6 @@ const Dashboard = () => {
       try {
         const response = await fetch("https://dashboard-sales-production.up.railway.app/api/sales");
         const data = await response.json();
-        console.log('hier drin ist', data);
         setData(data);
         setFilteredData(data);
       } catch (error) {
@@ -81,7 +79,6 @@ const Dashboard = () => {
       try {
         const response = await fetch(`https://dashboard-sales-production.up.railway.app/api/sales/${id}`, { method: "DELETE" });
         const result = await response.json();
-        console.log(result.message);
     
         setFilteredData(filteredData.filter((sale) => sale._id !== id));
         setData(data.filter((sale) => sale._id !== id));
