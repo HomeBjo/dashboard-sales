@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: model/sales.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,39 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: model/sales.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const mongoose = require("mongoose");
 
 
-    <h3> </h3>
+/**
+ * Definiert das Schema für die Verkaufsdaten.
+ * @typedef {Object} Sale
+ * @property {string} month - Name des Monats.
+ * @property {number} plan - Geplante Verkaufszahlen.
+ * @property {number} actual - Tatsächliche Verkaufszahlen.
+ * @property {number} days - Anzahl der verfügbaren Arbeitstage.
+ */
+const SalesSchema = new mongoose.Schema({
+    month: String,
+    plan: Number,
+    actual: Number,
+    days: Number
+  });
 
+  /** Erstellt ein Mongoose-Modell für die Verkaufsdaten. */
+  const Sales = mongoose.model("Sales", SalesSchema);
 
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+</code></pre>
+        </article>
+    </section>
 
 
 
