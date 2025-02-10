@@ -21,7 +21,7 @@ const Dashboard = () => {
  * @returns {Promise<void>} - Setzt die Verkaufsdaten im State.
  */
 const loadSalesData = async () => {
-  const salesData = await fetchSales(); // API-Call nutzen
+  const salesData = await fetchSales(); 
 
   if (salesData.length === 0) {
     console.error("Daten konnten nicht geladen werden.");
