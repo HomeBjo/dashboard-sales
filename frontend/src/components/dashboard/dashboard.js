@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 // import salesData from "../../data/salesData.json";
+import { fetchSales, deleteSale } from "./api";
 import "./dashboard.css";
 import Chart from "./chart";
 
@@ -15,24 +16,23 @@ const Dashboard = () => {
 /**
  * Lädt die Verkaufsdaten aus der API und speichert sie im State.
  *
- * @function fetchData
+ * @function loadSalesData
  * @async
  * @returns {Promise<void>} - Setzt die Verkaufsdaten im State.
  */
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("https://dashboard-sales-production.up.railway.app/api/sales");
-        const data = await response.json();
-        setData(data);
-        setFilteredData(data);
-      } catch (error) {
-        console.error("Fehler beim Laden der Daten:", error);
-      }
-    };
+const loadSalesData = async () => {
+  const salesData = await fetchSales(); // API-Call nutzen
 
-    fetchData();
-  }, []);
+  if (salesData.length === 0) {
+    console.error("Daten konnten nicht geladen werden.");
+  }
+  setData(salesData);
+  setFilteredData(salesData);
+};
+
+useEffect(() => {
+  loadSalesData();
+}, []);
 
 
   /**
@@ -71,21 +71,19 @@ const Dashboard = () => {
   /**
    * Löscht einen Verkaufseintrag basierend auf der ID. Habe ich zum entwickeln gebraucht.
    *
-   * @function deleteSale
+   * @function handleDeleteSale
    * @async
    * @param {string} id - Die ID des zu löschenden Verkaufs.
    */   
-    const deleteSale = async (id) => {
-      try {
-        const response = await fetch(`https://dashboard-sales-production.up.railway.app/api/sales/${id}`, { method: "DELETE" });
-        const result = await response.json();
-    
-        setFilteredData(filteredData.filter((sale) => sale._id !== id));
-        setData(data.filter((sale) => sale._id !== id));
-      } catch (error) {
-        console.error("Fehler beim Löschen:", error);
-      }
-    };
+  const handleDeleteSale = async (id) => {
+    const success = await deleteSale(id);
+    if (success) {
+      setFilteredData(filteredData.filter((sale) => sale._id !== id));
+      setData(data.filter((sale) => sale._id !== id));
+    } else {
+      console.error("Löschen fehlgeschlagen.");
+    }
+  };
 
 
   /**
@@ -162,10 +160,9 @@ const Dashboard = () => {
         <td className={item.actual === 0 ? "upcoming" : (zielErreichungMonat >= 100 ? "goal-achieved" : "goal-missed")}>
          {zielErreichungMonat.toFixed(2)}%
          </td>
-        <td>
-        <button onClick={() => deleteSale(item._id)}>🗑️ Löschen</button>
-        </td>
-        
+        {/* <td>
+        <button onClick={() => handleDeleteSale(item._id)}>🗑️ Löschen</button>
+        </td> */}
       </tr>
       
     );
