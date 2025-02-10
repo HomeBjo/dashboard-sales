@@ -18,4 +18,5 @@ const SalesSchema = new mongoose.Schema({
 
   /** Erstellt ein Mongoose-Modell für die Verkaufsdaten. */
   const Sales = mongoose.model("Sales", SalesSchema);
+  module.exports = Sales;
 

@@ -15,7 +15,7 @@ const MONGO_URI = process.env.MONGO_URI;
  * - JSON-Parsing für ankommende Requests.
  */
 app.use(cors({
-  origin: "https://dashboard.xn--bjrnteneicken-jmb.de/", 
+  origin: ["https://dashboard.xn--bjrnteneicken-jmb.de/", "http://localhost:3000"],
   methods: "GET,POST,DELETE,PUT",
   allowedHeaders: "Content-Type,Authorization"
 }));
