@@ -14,7 +14,11 @@ const MONGO_URI = process.env.MONGO_URI;
  * - CORS erlaubt externe Anfragen.
  * - JSON-Parsing für ankommende Requests.
  */
-app.use(cors());
+app.use(cors({
+  origin: "https://dashboard.xn--bijntneeicken-jmb.de", 
+  methods: "GET,POST,DELETE,PUT",
+  allowedHeaders: "Content-Type,Authorization"
+}));
 app.use(express.json());
 
 
