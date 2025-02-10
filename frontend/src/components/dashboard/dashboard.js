@@ -15,7 +15,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/sales");
+        const response = await fetch("https://dashboard-sales-production.up.railway.app/api/sales");
         const data = await response.json();
         console.log('hier drin ist', data);
         setData(data);
@@ -56,7 +56,7 @@ const Dashboard = () => {
     // Funktion für Delete
     const deleteSale = async (id) => {
       try {
-        const response = await fetch(`http://localhost:5000/api/sales/${id}`, { method: "DELETE" });
+        const response = await fetch(`https://dashboard-sales-production.up.railway.app/api/sales/${id}`, { method: "DELETE" });
         const result = await response.json();
         console.log(result.message);
     

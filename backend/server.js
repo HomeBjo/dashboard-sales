@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI; 
 
 
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -44,6 +45,7 @@ app.get("/api/sales", async (req, res) => {
 
 
 // Route zum Einfügen von Testdaten
+// https://dashboard-sales-production.up.railway.app/api/sales/add  zum hinzufügen der daten in die online db
 app.get("/api/sales/add", async (req, res) => {
   try {
     const testData = [
