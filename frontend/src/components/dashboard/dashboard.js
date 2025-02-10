@@ -137,12 +137,12 @@ const Dashboard = () => {
         <td>{item.days}</td>
         <td>{tagesSoll.toFixed(2)}</td>
         <td>{tagesIst.toFixed(2)}</td>
-        <td className={zielErreichungHeute >= 100 ? "goal-achieved" : "goal-missed"}>
+        <td className={item.actual === 0 ? "upcoming" : (zielErreichungHeute >= 100 ? "goal-achieved" : "goal-missed")}>
           {zielErreichungHeute.toFixed(2)}%
         </td>
-        <td className={zielErreichungMonat >= 100 ? "goal-achieved" : "goal-missed"}>
-          {zielErreichungMonat.toFixed(2)}%
-        </td>
+        <td className={item.actual === 0 ? "upcoming" : (zielErreichungMonat >= 100 ? "goal-achieved" : "goal-missed")}>
+         {zielErreichungMonat.toFixed(2)}%
+         </td>
         <td>
         <button onClick={() => deleteSale(item._id)}>🗑️ Löschen</button>
         </td>
@@ -152,7 +152,7 @@ const Dashboard = () => {
     );
   })
 ) : (
-  <tr><td colSpan="8">Keine Daten verfügbar</td></tr> // Optional: Anzeige, wenn keine Daten vorliegen
+  <tr><td colSpan="8">Keine Daten verfügbar</td></tr> // Anzeige, wenn keine Daten vorliegen
 )}
         </tbody>
       </table>

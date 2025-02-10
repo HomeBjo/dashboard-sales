@@ -54,6 +54,10 @@ table {
     font-weight: bold;
   }
 
+  .upcoming {
+    background-color: #f0f0f0;
+  }
+
   @media (max-width: 768px) {
     table {
       font-size: 12px;
