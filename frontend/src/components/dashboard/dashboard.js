@@ -3,15 +3,23 @@ import React, { useState, useEffect } from "react";
 import "./dashboard.css";
 import Chart from "./chart";
 
+
 const Dashboard = () => {
   const [data, setData] = useState([]);
   console.log("State von data:", data);
-  const [showChart, setShowChart] = useState(false); // ⬅ Zustand für Chart-Steuerung
+  const [showChart, setShowChart] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState("Alle");
   const [sortOrder, setSortOrder] = useState("asc");
 
 
+/**
+ * Lädt die Verkaufsdaten aus der API und speichert sie im State.
+ *
+ * @function fetchData
+ * @async
+ * @returns {Promise<void>} - Setzt die Verkaufsdaten im State.
+ */
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -25,11 +33,16 @@ const Dashboard = () => {
       }
     };
 
-    fetchData(); // Aufruf der async Funktion
+    fetchData();
   }, []);
 
 
-   // Funktion für das Filtern nach Monat
+  /**
+   * Filtert die Daten basierend auf dem ausgewählten Monat.
+   *
+   * @function handleMonthChange
+   * @param {Event} event - Das Change-Event des Dropdowns.
+   */  
    const handleMonthChange = (event) => {
     const month = event.target.value;
     setSelectedMonth(month);
@@ -42,7 +55,11 @@ const Dashboard = () => {
   };
 
 
-    // Funktion für das Sortieren nach Plan-Zahl
+  /**
+   * Sortiert die Daten basierend auf der Plan-Zahl (aufsteigend/absteigend).
+   *
+   * @function handleSort
+   */   
     const handleSort = () => {
       const sortedData = [...filteredData].sort((a, b) => {
         return sortOrder === "asc" ? a.plan - b.plan : b.plan - a.plan;
@@ -53,7 +70,13 @@ const Dashboard = () => {
     };
 
 
-    // Funktion für Delete
+  /**
+   * Löscht einen Verkaufseintrag basierend auf der ID. Habe ich zum entwickeln gebraucht.
+   *
+   * @function deleteSale
+   * @async
+   * @param {string} id - Die ID des zu löschenden Verkaufs.
+   */   
     const deleteSale = async (id) => {
       try {
         const response = await fetch(`https://dashboard-sales-production.up.railway.app/api/sales/${id}`, { method: "DELETE" });
@@ -71,6 +94,7 @@ const Dashboard = () => {
   /**
    * Berechnet verschiedene Verkaufskennzahlen basierend auf den gegebenen Daten.
    *
+   * @function calculateMetrics
    * @param {Object} item - Ein Verkaufsdatensatz.
    * @param {number} item.plan - Geplante Verkaufszahlen für den Monat.
    * @param {number} item.actual - Tatsächliche Verkaufszahlen bis heute.
@@ -78,16 +102,14 @@ const Dashboard = () => {
    * @returns {Object} - Berechnete Werte für die täglichen Verkaufsziele und den Fortschritt.
    */
 
-  // Funktion zur Berechnung der Werte
   const calculateMetrics = (item) => {
-    const tagesSoll = item.plan / item.days; // Wie viele Autos pro Tag verkauft werden müssen
-    const tagesIst = item.actual / item.days; // Wie viele tatsächlich verkauft wurden
+    const tagesSoll = item.plan / item.days; 
+    const tagesIst = item.actual / item.days; 
 
-    // const pastdays = 15;
     let zielErreichungHeute = (tagesIst / tagesSoll) * 100;
     zielErreichungHeute = Math.floor(zielErreichungHeute * 100) / 100; 
 
-    const zielErreichungMonat = (item.actual / item.plan) * 100; // Monatsfortschritt
+    const zielErreichungMonat = (item.actual / item.plan) * 100; 
 
     return { tagesSoll, tagesIst, zielErreichungHeute, zielErreichungMonat };
   };
@@ -152,7 +174,7 @@ const Dashboard = () => {
     );
   })
 ) : (
-  <tr><td colSpan="8">Keine Daten verfügbar</td></tr> // Anzeige, wenn keine Daten vorliegen
+  <tr><td colSpan="8">Keine Daten verfügbar</td></tr> 
 )}
         </tbody>
       </table>
