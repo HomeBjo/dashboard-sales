@@ -2,10 +2,10 @@
  * API-Utility-Funktionen für den Zugriff auf Verkaufsdaten.
  * Diese Funktionen rufen Endpunkte des Backends auf und geben die Daten zurück.
  */
-const BASE_URL = "https://dashboard-sales-production.up.railway.app/api/sales";
+// const BASE_URL = "https://dashboard-sales-production.up.railway.app/api/sales";
 
 //loakle entwicklung
-// const BASE_URL = "http://localhost:5000/api/sales";
+const BASE_URL = "http://localhost:5000/api/sales";
 
 
 /**
