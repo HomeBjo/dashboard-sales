@@ -74,16 +74,3 @@ if (USE_DUMMY_DATA) {
 app.listen(PORT, () => {
   console.log(` Server auf http://localhost:${PORT}`);
 });
-
-
-//----------> Entwicklungs Code der für Lokale Tests verwendet werden kann
-// Dummy data 2(später durch DB ersetzt)
-// const salesData = [
-//   { month: "Januar", plan: 100, actual: 90, days: 22 },
-//   { month: "Februar", plan: 120, actual: 110, days: 20 },
-// ];
-
-// // API-Routen Dummy verbindung 2
-// app.get("/api/sales", (req, res) => {
-//   res.json(salesData);
-// });
