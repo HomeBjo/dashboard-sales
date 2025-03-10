@@ -3,6 +3,8 @@
 **Ein einfaches Dashboard zur Visualisierung von Verkaufsdaten.**  
 Basiert auf **React (Frontend)** und **Node.js/Express mit MongoDB (Backend).**  
 
+Zur Erweiterung ein OOP und nicht OOP version zum Direkten Vergleich 
+
 ## 🚀 Technologien & Stack
 
 - **Frontend:** React, JavaScript, Fetch API
