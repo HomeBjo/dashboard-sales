@@ -26,7 +26,7 @@ app.use(express.json());
 /**
  * Dummy-Daten für Offline-Tests
  */
-const dummySalesData = [
+let  dummySalesData = [
   { month: "Januar", plan: 100, actual: 90, days: 22 },
   { month: "Februar", plan: 120, actual: 110, days: 20 },
 ];
@@ -60,12 +60,35 @@ if (USE_DUMMY_DATA) {
 /**
  * API-Routen 
  */
+
 if (USE_DUMMY_DATA) {
   app.get("/api/sales", (req, res) => {
     res.json(dummySalesData);
   });
+} else {
+  app.use("/api/sales", salesRoutes);
 }
 
+/**
+ * Dummy-Daten für Offline-Tests
+ */
+app.get("/api/sales/add", (req, res) => {
+  console.log("📢 Route /api/sales/add wurde aufgerufen!");
+  try {
+    const testData = [
+      { month: "März", plan: 130, actual: 130, days: 23 },
+      { month: "April", plan: 140, actual: 0, days: 22 },
+    ];
+
+    dummySalesData = [...dummySalesData, ...testData]; 
+
+    console.log("✅ Dummy-Daten nach dem Hinzufügen:");
+    res.json({ message: "Testdaten erfolgreich hinzugefügt!" });
+  } catch (error) {
+    console.error("❌ Fehler beim Einfügen der Dummy-Daten:", error);
+    res.status(500).json({ message: "Fehler beim Einfügen der Dummy-Daten", error: error.toString() });
+  }
+});
 
 /**
  * Startet den Express-Server auf dem definierten Port.
