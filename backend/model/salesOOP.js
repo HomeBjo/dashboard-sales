@@ -53,12 +53,17 @@ class SalesModel {
     return await this.model.findByIdAndDelete(id);
   }
 
-  async getSalesByMonth(month) {
-  if (this.useDummyData) {
-    return this.dummyData.filter(sale => sale.month === month);
-  }
-  return await this.model.find({ month });
-}}
+  async getSalesByMonth(months) {
+    if (!Array.isArray(months)) {
+      console.log("❌ Fehler: months ist kein Array!", months);
+      return [];
+    }
+  
+    if (this.useDummyData) {
+      return this.dummyData.filter(sale => months.includes(sale.month));
+    }
+    return await this.model.find({ month: { $in: months } });
+  }}
 
 
 // Singleton mit Dummy-Daten-Option

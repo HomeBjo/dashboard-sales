@@ -32,13 +32,14 @@ router.get("/add", (req, res) => {
 /**
  * Gibt die Verkaufsdaten für einen bestimmten Monat zurück.
  */
-router.get("/:month", (req, res) => {
+router.get("/:months", (req, res) => {
   try {
-    const { month } = req.params;
-    const filteredData = dummySalesData.filter(sale => sale.month === month);
+    const { months } = req.params;
+    const monthArray = months.split(",").map(m => m.trim()); // Monate in ein Array umwandeln
+    const filteredData = dummySalesData.filter(sale => monthArray.includes(sale.month));
 
     if (filteredData.length === 0) {
-      return res.status(404).json({ message: `Keine Daten für ${month} gefunden` });
+      return res.status(404).json({ message: `Keine Daten für ${months} gefunden` });
     }
 
     res.json(filteredData);
@@ -46,5 +47,6 @@ router.get("/:month", (req, res) => {
     res.status(500).json({ message: "Fehler beim Abrufen der Dummy-Daten", error });
   }
 });
+
 
 module.exports = router;
