@@ -40,6 +40,8 @@ let  dummySalesData = [
  */
 if (USE_DUMMY_DATA) {
   console.log("⚠️ Dummy-Modus aktiviert: Backend nutzt nur lokale Dummy-Daten.");
+  const salesRoutes = require("./routes/salesRoutes");
+
 } else {
   console.log("✅ Verbinde mit MongoDB...");
   const mongoose = require("mongoose");
@@ -60,35 +62,56 @@ if (USE_DUMMY_DATA) {
 /**
  * API-Routen 
  */
+app.use("/api/sales", salesRoutes);
 
-if (USE_DUMMY_DATA) {
-  app.get("/api/sales", (req, res) => {
-    res.json(dummySalesData);
-  });
-} else {
-  app.use("/api/sales", salesRoutes);
-}
+// if (USE_DUMMY_DATA) {
+//   app.get("/api/sales", (req, res) => {
+//     res.json(dummySalesData);
+//   });
+// } else {
+//   app.use("/api/sales", salesRoutes);
+// }
 
 /**
  * Dummy-Daten für Offline-Tests
  */
-app.get("/api/sales/add", (req, res) => {
-  console.log("📢 Route /api/sales/add wurde aufgerufen!");
+// app.get("/api/sales/add", (req, res) => {
+//   console.log("📢 Route /api/sales/add wurde aufgerufen!");
+//   try {
+//     const testData = [
+//       { month: "März", plan: 130, actual: 130, days: 23 },
+//       { month: "April", plan: 140, actual: 0, days: 22 },
+//     ];
+
+//     dummySalesData = [...dummySalesData, ...testData]; 
+
+//     console.log("✅ Dummy-Daten nach dem Hinzufügen:");
+//     res.json({ message: "Testdaten erfolgreich hinzugefügt!" });
+//   } catch (error) {
+//     console.error("❌ Fehler beim Einfügen der Dummy-Daten:", error);
+//     res.status(500).json({ message: "Fehler beim Einfügen der Dummy-Daten", error: error.toString() });
+//   }
+// });
+
+/**
+ * Gibt die Verkaufsdaten für einen bestimmten Monat zurück.
+ * @route GET /api/sales/:month
+ */
+app.get("/:month", async (req, res) => {
   try {
-    const testData = [
-      { month: "März", plan: 130, actual: 130, days: 23 },
-      { month: "April", plan: 140, actual: 0, days: 22 },
-    ];
+    const { month } = req.params;
+    const sales = await Sales.find({ month });
 
-    dummySalesData = [...dummySalesData, ...testData]; 
+    if (sales.length === 0) {
+      return res.status(404).json({ message: `Keine Daten für ${month} gefunden` });
+    }
 
-    console.log("✅ Dummy-Daten nach dem Hinzufügen:");
-    res.json({ message: "Testdaten erfolgreich hinzugefügt!" });
+    res.json(sales);
   } catch (error) {
-    console.error("❌ Fehler beim Einfügen der Dummy-Daten:", error);
-    res.status(500).json({ message: "Fehler beim Einfügen der Dummy-Daten", error: error.toString() });
+    res.status(500).json({ message: "Fehler beim Abrufen der Daten", error });
   }
 });
+
 
 /**
  * Startet den Express-Server auf dem definierten Port.
