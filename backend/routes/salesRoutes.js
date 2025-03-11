@@ -1,51 +1,49 @@
 const express = require("express");
-const salesModel = require("../model/sales");
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  try {
-    const sales = await salesModel.getAllSales();
-    res.json(sales);
-  } catch (error) {
-    res.status(500).json({ message: "Fehler beim Abrufen der Daten", error });
-  }
+let dummySalesData = [
+  { month: "Januar", plan: 100, actual: 90, days: 22 },
+  { month: "Februar", plan: 120, actual: 110, days: 20 },
+];
+
+/**
+ * Gibt alle Verkaufsdaten zurück.
+ */
+router.get("/", (req, res) => {
+  res.json(dummySalesData);
 });
 
-router.get("/add", async (req, res) => {
+/**
+ * Fügt Testdaten zur Dummy-Datenbank hinzu.
+ */
+router.get("/add", (req, res) => {
   try {
     const testData = [
-      { month: "Januar", plan: 100, actual: 90, days: 22 },
-      { month: "Februar", plan: 120, actual: 110, days: 20 }
+      { month: "März", plan: 130, actual: 130, days: 23 },
+      { month: "April", plan: 140, actual: 0, days: 22 },
     ];
-    await salesModel.addSalesData(testData);
-    res.json({ message: "Testdaten erfolgreich gespeichert!" });
+    dummySalesData = [...dummySalesData, ...testData];
+    res.json({ message: "Testdaten erfolgreich hinzugefügt (Dummy-Daten)!" });
   } catch (error) {
-    res.status(500).json({ message: "Fehler beim Einfügen der Daten", error });
+    res.status(500).json({ message: "Fehler beim Einfügen der Dummy-Daten", error });
   }
 });
 
-router.delete("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    await salesModel.deleteSaleById(id);
-    res.json({ message: `Eintrag mit ID ${id} erfolgreich gelöscht!` });
-  } catch (error) {
-    res.status(500).json({ message: "Fehler beim Löschen", error });
-  }
-});
-
-router.get("/:month", async (req, res) => {
+/**
+ * Gibt die Verkaufsdaten für einen bestimmten Monat zurück.
+ */
+router.get("/:month", (req, res) => {
   try {
     const { month } = req.params;
-    const sales = await salesModel.getSalesByMonth(month);
+    const filteredData = dummySalesData.filter(sale => sale.month === month);
 
-    if (sales.length === 0) {
+    if (filteredData.length === 0) {
       return res.status(404).json({ message: `Keine Daten für ${month} gefunden` });
     }
 
-    res.json(sales);
+    res.json(filteredData);
   } catch (error) {
-    res.status(500).json({ message: "Fehler beim Abrufen der Daten", error });
+    res.status(500).json({ message: "Fehler beim Abrufen der Dummy-Daten", error });
   }
 });
 

@@ -1,12 +1,12 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const salesRoutes = require("./routes/salesRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 const USE_DUMMY_DATA = process.env.USE_DUMMY_DATA === "true";
+const USE_OOP = process.env.USE_OOP === "true"; 
 
 app.use(cors({
   origin: ["https://dashboard.xn--bjrnteneicken-jmb.de", "http://localhost:3000"],
@@ -15,7 +15,11 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Dummy-Modus Check
+// const Sales = USE_OOP ? require("./model/salesOOP") : require("./model/sales");
+
+const salesRoutes = USE_OOP ? require("./routes/salesRoutesOOP") : require("./routes/salesRoutes");
+
+
 if (USE_DUMMY_DATA) {
   console.log("⚠️ Dummy-Modus aktiviert: Backend nutzt nur lokale Dummy-Daten.");
 } else {
@@ -30,9 +34,11 @@ if (USE_DUMMY_DATA) {
   .catch(err => console.error("❌ MongoDB Fehler:", err));
 }
 
-// API-Routen registrieren (egal ob Dummy oder MongoDB)
+
 app.use("/api/sales", salesRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server läuft auf http://localhost:${PORT}`);
+  console.log(`🔹 OOP-Modus: ${USE_OOP ? "Aktiviert" : "Deaktiviert"}`);
+  console.log(`🔹 Dummy-Daten: ${USE_DUMMY_DATA ? "Aktiviert" : "Deaktiviert"}`);
 });

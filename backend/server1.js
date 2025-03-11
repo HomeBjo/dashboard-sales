@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const salesRoutes = require("./routes/salesRoutes");
+const salesRoutes = require("./routes/salesRoutesOOP");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -31,12 +31,12 @@ app.use(express.json());
  */
 if (USE_DUMMY_DATA) {
   console.log("⚠️ Dummy-Modus aktiviert: Backend nutzt nur lokale Dummy-Daten.");
-  const salesRoutes = require("./routes/salesRoutes");
+  const salesRoutes = require("./routes/salesRoutesOOP");
 
 } else {
   console.log("✅ Verbinde mit MongoDB...");
   const mongoose = require("mongoose");
-  const salesRoutes = require("./routes/salesRoutes");
+  const salesRoutes = require("./routes/salesRoutesOOP");
 
   mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -62,26 +62,6 @@ app.use("/api/sales", salesRoutes);
 // } else {
 //   app.use("/api/sales", salesRoutes);
 // }
-
-/**
- * Gibt die Verkaufsdaten für einen bestimmten Monat zurück.
- * @route GET /api/sales/:month
- */
-app.get("/:month", async (req, res) => {
-  try {
-    const { month } = req.params;
-    const sales = await Sales.find({ month });
-
-    if (sales.length === 0) {
-      return res.status(404).json({ message: `Keine Daten für ${month} gefunden` });
-    }
-
-    res.json(sales);
-  } catch (error) {
-    res.status(500).json({ message: "Fehler beim Abrufen der Daten", error });
-  }
-});
-
 
 /**
  * Startet den Express-Server auf dem definierten Port.
