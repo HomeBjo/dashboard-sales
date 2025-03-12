@@ -1,8 +1,13 @@
 const mongoose = require("mongoose");
 
 class SalesModel {
-  constructor(useDummyData = false) {
+  constructor(useDummyData = false, useExternalAPI = false) {
+    // const useDummyData = process.env.USE_DUMMY_DATA === "true";
+    // const useExternalAPI = process.env.USE_EXTERNAL_API === "true";
+
     this.useDummyData = useDummyData;
+    this.useExternalAPI = useExternalAPI;
+
     this.dummyData = [
       { month: "Januar", plan: 100, actual: 90, days: 22 },
       { month: "Februar", plan: 120, actual: 110, days: 20 },
@@ -18,7 +23,13 @@ class SalesModel {
       { month: "Dezember", plan: 220, actual: 0, days: 22 }
     ];
 
-    if (!useDummyData) {
+    this.dummyAPIdata = [
+      { month: "Oktober", plan: 200, actual: 0, days: 22 },
+      { month: "November", plan: 210, actual: 0, days: 21 },
+      { month: "Dezember", plan: 220, actual: 0, days: 22 }
+    ];
+
+    if (!useDummyData && !useExternalAPI) {
       const salesSchema = new mongoose.Schema({
         month: String,
         plan: Number,
@@ -31,9 +42,14 @@ class SalesModel {
   }
 
   async getAllSales() {
-    if (this.useDummyData) {
+    if (this.useDummyData && !this.useExternalAPI) {
       return this.dummyData;
     }
+
+    if (this.useDummyData && this.useExternalAPI) {
+      return this.dummyAPIdata;
+    }
+
     return await this.model.find();
   }
 
@@ -66,8 +82,9 @@ class SalesModel {
   }}
 
 
-// Singleton mit Dummy-Daten-Option
-const useDummyData = process.env.USE_DUMMY_DATA === "true";
-module.exports = new SalesModel(useDummyData);
+
+  const useDummyData = process.env.USE_DUMMY_DATA === "true";
+  const useExternalAPI = process.env.USE_EXTERNAL_API === "true";
+ module.exports = new SalesModel(useDummyData, useExternalAPI);   
 
 

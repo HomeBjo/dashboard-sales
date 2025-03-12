@@ -1,16 +1,31 @@
 const express = require("express");
 const router = express.Router();
+let useExternalAPI = process.env.USE_EXTERNAL_API === "true";
+
 
 let dummySalesData = [
   { month: "Januar", plan: 100, actual: 90, days: 22 },
   { month: "Februar", plan: 120, actual: 110, days: 20 },
 ];
 
+let dummyAPIdata = [
+  { month: "Oktober", plan: 200, actual: 0, days: 22 },
+  { month: "November", plan: 210, actual: 0, days: 21 },
+  { month: "Dezember", plan: 220, actual: 0, days: 22 }
+];
+
 /**
  * Gibt alle Verkaufsdaten zurück.
  */
 router.get("/", (req, res) => {
-  res.json(dummySalesData);
+  
+  if (useExternalAPI) {
+  
+      res.json(dummyAPIdata);
+  } else {
+     
+      res.json(dummySalesData);
+  }
 });
 
 /**
