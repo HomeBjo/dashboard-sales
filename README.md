@@ -1,23 +1,23 @@
 # 📊 Sales Dashboard
 
-**Ein einfaches Dashboard zur Visualisierung von Verkaufsdaten.**  
-Basiert auf **React (Frontend)** und **Node.js/Express mit MongoDB (Backend).**  
+**A simple dashboard for visualizing sales data.**  
+Built with  **React (Frontend)** and **Node.js/Express with MongoDB (Backend).**  
 
-Zur Erweiterung ein OOP und nicht OOP version zum Direkten Vergleich 
+Includes both OOP and non-OOP versions for direct comparison.
 
-## 🚀 Technologien & Stack
+##  Technologies & Stack
 
 - **Frontend:** React, JavaScript, Fetch API
 - **Backend:** Node.js, Express.js, Mongoose (MongoDB)
-- **Datenbank:** MongoDB (gehostet mit Railway oder lokal)
-- **Hosting:** Frontend per FTP, Backend über Railway
+- **Datenbank:** MongoDB (hosted on Railway or locally)
+- **Hosting:**  Frontend via FTP, Backend via Railway
 
 ---
 
-## 📌 Installation & Setup
+##  Installation & Setup
 
-### **1️⃣ Backend starten**
+### **Start Backend**
 ```sh
 cd backend
-npm install  # Abhängigkeiten installieren
-npm start    # Server starten (läuft auf http://localhost:5000)
+npm install  
+npm start   
