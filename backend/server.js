@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 const USE_DUMMY_DATA = process.env.USE_DUMMY_DATA === "true";
 const USE_OOP = process.env.USE_OOP === "true"; 
+const USE_EXTERNAL_API = process.env.USE_EXTERNAL_API === "true"; 
 
 app.use(cors({
   origin: ["https://dashboard.xn--bjrnteneicken-jmb.de", "http://localhost:3000"],
@@ -41,4 +42,5 @@ app.listen(PORT, () => {
   console.log(`🚀 Server läuft auf http://localhost:${PORT}`);
   console.log(`🔹 OOP-Modus: ${USE_OOP ? "Aktiviert" : "Deaktiviert"}`);
   console.log(`🔹 Dummy-Daten: ${USE_DUMMY_DATA ? "Aktiviert" : "Deaktiviert"}`);
+  console.log(`🔹 Externe API: ${USE_EXTERNAL_API ? "Aktiviert" : "Deaktiviert"}`);
 });

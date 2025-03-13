@@ -1,5 +1,6 @@
 const express = require("express");
 const salesModel = require("../model/salesOOP");
+console.log("✅ SalesModel geladen:", salesModel);
 const router = express.Router();
 
 // router.get("/", async (req, res) => {
@@ -12,17 +13,12 @@ const router = express.Router();
 // });
 
 router.get("/", async (req, res) => {
-  console.log("📌 Query Route wurde aufgerufen!");
-  console.log("📌 FULL QUERY OBJECT:", req.query);
 
   let months = req.query.months; 
   if (!months) {
-    console.log("📌 Keine Filterung – alle Sales werden zurückgegeben.");
     return res.json(await salesModel.getAllSales());
   }
-
   const monthArray = months.split(",").map(m => m.trim());
-  console.log("📌 Query Monate nach Split:", monthArray);
 
   const sales = await salesModel.getSalesByMonth(monthArray);
 
@@ -54,17 +50,19 @@ router.delete("/:id", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Fehler beim Löschen", error });
   }
+
 });
 router.get("/test", async (req, res) => {
   res.json({ message: "🚀 Route funktioniert! 🎉" });
 });
+
 router.get("/:months", async (req, res) => {
   try {
     const { months } = req.params;
     const monthArray = months ? months.split(",") : [];
-
+    console.log(" getSalesByMonth wird aufgerufen mit:", monthArray);
     const sales = await salesModel.getSalesByMonth(monthArray);
-
+    console.log("Ergebnis:", sales);
     if (sales.length === 0) {
       return res.status(404).json({ message: `Keine Daten gefunden` });
     }

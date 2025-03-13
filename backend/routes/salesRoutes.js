@@ -8,7 +8,7 @@ let dummySalesData = [
   { month: "Februar", plan: 120, actual: 110, days: 20 },
 ];
 
-let dummyAPIdata = [
+let dummyAPIData  = [
   { month: "Oktober", plan: 200, actual: 0, days: 22 },
   { month: "November", plan: 210, actual: 0, days: 21 },
   { month: "Dezember", plan: 220, actual: 0, days: 22 }
@@ -18,14 +18,23 @@ let dummyAPIdata = [
  * Gibt alle Verkaufsdaten zurück.
  */
 router.get("/", (req, res) => {
-  
-  if (useExternalAPI) {
-  
-      res.json(dummyAPIdata);
-  } else {
-     
-      res.json(dummySalesData);
+  let months = req.query.months;
+
+  let salesData = useExternalAPI ? dummyAPIData : dummySalesData;
+
+  if (!months) {
+    return res.json(salesData);
   }
+
+  let monthArray = months.split(",").map(m => m.trim());
+
+  let filteredData = salesData.filter(sale => monthArray.includes(sale.month));
+
+  if (filteredData.length === 0) {
+    return res.status(404).json({ message: "Keine Daten gefunden" });
+  }
+
+  res.json(filteredData);
 });
 
 /**
